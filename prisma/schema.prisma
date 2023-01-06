@@ -1,0 +1,63 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Agenda {
+  mov          String?        @db.VarChar
+  id           Int            @id
+  tipo         String?        @db.VarChar
+  Movimentacao Movimentacao[]
+}
+
+model Equipamento {
+  codigo    Int?
+  plaqueta  Int      @id
+  descricao String?  @db.VarChar
+  valor     Decimal? @db.Money
+  setor     Int?
+  Setor     Setor?   @relation(fields: [setor], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model Filial {
+  id                                                Int            @id
+  descricao                                         String?        @db.VarChar
+  responsavel                                       String?        @db.VarChar
+  Movimentacao_Movimentacao_destinatario_idToFilial Movimentacao[] @relation("Movimentacao_destinatario_idToFilial")
+  Movimentacao_Movimentacao_remetente_idToFilial    Movimentacao[] @relation("Movimentacao_remetente_idToFilial")
+}
+
+model Movimentacao {
+  id                                          Int       @id @default(autoincrement())
+  status                                      status?
+  data_envio                                  DateTime? @db.Date
+  data_retorno                                DateTime? @db.Date
+  setor                                       Int?
+  observacao                                  String?   @db.VarChar
+  remetente_id                                Int?
+  destinatario_id                             Int?
+  equipamentos_id                             Int[]
+  movimentacao                                Int?
+  Filial_Movimentacao_destinatario_idToFilial Filial?   @relation("Movimentacao_destinatario_idToFilial", fields: [destinatario_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  Agenda                                      Agenda?   @relation(fields: [movimentacao], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  Filial_Movimentacao_remetente_idToFilial    Filial?   @relation("Movimentacao_remetente_idToFilial", fields: [remetente_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  Setor                                       Setor?    @relation(fields: [setor], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model Setor {
+  id           Int            @id
+  descricao    String?        @db.VarChar
+  responsavel  String?        @db.VarChar
+  Equipamento  Equipamento[]
+  Movimentacao Movimentacao[]
+}
+
+enum status {
+  sent
+  waiting
+  confirmed
+}
