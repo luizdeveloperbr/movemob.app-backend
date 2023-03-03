@@ -1,5 +1,5 @@
 generator client {
-  provider = "prisma-client-js"
+  provider      = "prisma-client-js"
   binaryTargets = ["debian-openssl-1.1.x"]
 }
 
@@ -17,10 +17,13 @@ model Agenda {
 
 model Equipamento {
   codigo    Int?
+  status    status?
+  filial    Int?
   plaqueta  Int      @id
   descricao String?  @db.VarChar
   valor     Decimal? @db.Money
   setor     Int?
+  Filial    Filial?  @relation(fields: [filial], references: [id], onDelete: NoAction, onUpdate: NoAction)
   Setor     Setor?   @relation(fields: [setor], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }
 
@@ -28,6 +31,7 @@ model Filial {
   id                                                Int            @id
   descricao                                         String?        @db.VarChar
   responsavel                                       String?        @db.VarChar
+  Equipamento                                       Equipamento[]
   Movimentacao_Movimentacao_destinatario_idToFilial Movimentacao[] @relation("Movimentacao_destinatario_idToFilial")
   Movimentacao_Movimentacao_remetente_idToFilial    Movimentacao[] @relation("Movimentacao_remetente_idToFilial")
 }

@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import {EquipamentoService} from '../equipamento/equipamento.services'
 import { Equipamento as EquipamentoModel } from '@prisma/client';
 
@@ -13,6 +13,11 @@ export class EquipamentoController {
   @Get()
   listarEquipamentos() {
     return this.equipamentoService.listarEquipamentos()
+  }
+
+  @Get("/:id")
+  selecionarEquipamentoPeloId(@Param('id') id: number){
+    return this.equipamentoService.selecionarEquipamentoPeloId(+id)
   }
   @Post()
   adicionarEquipamento(@Body() novoEquipamento: EquipamentoModel){
