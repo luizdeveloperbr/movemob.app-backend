@@ -1,0 +1,72 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model agenda {
+  id           Int            @id
+  descricao    String?        @db.VarChar
+  natureza     String?        @db.VarChar
+  movimentacao movimentacao[]
+}
+
+model equipamento {
+  id        Int      @id
+  codigo    Int?
+  filial    Int?
+  descricao String?  @db.VarChar
+  valor     Decimal? @db.Money
+  setor_id  Int?
+  usuario   usuario? @relation(fields: [filial], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  setor     setor?   @relation(fields: [setor_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model movimentacao {
+  id                                            Int       @id @default(autoincrement())
+  status                                        status_mov?
+  data_envio                                    DateTime? @db.Date
+  data_retorno                                  DateTime? @db.Date
+  setor_id                                      Int?
+  observacao                                    String?   @db.VarChar
+  remetente_id                                  Int?
+  destinatario_id                               Int?
+  equipamentos_id                               Int[]
+  tipo                                          Int?
+  usuario_movimentacao_destinatario_idTousuario usuario?  @relation("movimentacao_destinatario_idTousuario", fields: [destinatario_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  usuario_movimentacao_remetente_idTousuario    usuario?  @relation("movimentacao_remetente_idTousuario", fields: [remetente_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  setor                                         setor?    @relation(fields: [setor_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  agenda                                        agenda?   @relation(fields: [tipo], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model setor {
+  id           Int            @id
+  descricao    String?        @db.VarChar
+  responsavel  String?        @db.VarChar
+  equipamento  equipamento[]
+  movimentacao movimentacao[]
+}
+
+model usuario {
+  id                                                 Int            @id
+  nome                                               String?        @db.VarChar
+  tipo                                               userid?
+  setores_id                                         Int[]
+  equipamento                                        equipamento[]
+  movimentacao_movimentacao_destinatario_idTousuario movimentacao[] @relation("movimentacao_destinatario_idTousuario")
+  movimentacao_movimentacao_remetente_idTousuario    movimentacao[] @relation("movimentacao_remetente_idTousuario")
+}
+
+enum status_mov {
+  enviado
+  pendente
+  confirmado
+}
+
+enum userid {
+  filial
+  sede
+}
