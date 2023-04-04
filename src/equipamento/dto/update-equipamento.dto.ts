@@ -1,4 +1,11 @@
-import { PartialType } from '@nestjs/mapped-types';
-import { CreateEquipamentoDto } from './create-equipamento.dto';
 
-export class UpdateEquipamentoDto extends PartialType(CreateEquipamentoDto) {}
+import {Prisma} from '@prisma/client'
+
+
+
+
+export class UpdateEquipamentoDto {
+  codigo?: number;
+descricao?: string;
+valor?: Prisma.Decimal;
+}

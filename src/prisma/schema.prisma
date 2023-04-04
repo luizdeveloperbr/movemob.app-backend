@@ -1,6 +1,11 @@
 generator client {
   provider = "prisma-client-js"
 }
+generator nestjsDto {
+provider = "prisma-generator-nestjs-dto"
+output = "../"
+outputToNestJsResourceStructure = "true"
+}
 
 datasource db {
   provider = "postgresql"

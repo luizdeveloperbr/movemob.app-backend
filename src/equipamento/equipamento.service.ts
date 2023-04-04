@@ -1,15 +1,19 @@
 import { Injectable } from '@nestjs/common';
 import { CreateEquipamentoDto } from './dto/create-equipamento.dto';
 import { UpdateEquipamentoDto } from './dto/update-equipamento.dto';
+import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class EquipamentoService {
+
+  constructor(private readonly prismaService: PrismaService) { }
+
   create(createEquipamentoDto: CreateEquipamentoDto) {
     return 'This action adds a new equipamento';
   }
 
-  findAll() {
-    return `This action returns all equipamento`;
+  async findAll() {
+    return this.prismaService.equipamento.findMany()
   }
 
   findOne(id: number) {
