@@ -1,6 +1,6 @@
 generator client {
-  provider      = "prisma-client-js"
-  binaryTargets = ["debian-openssl-1.1.x"]
+  provider = "prisma-client-js"
+  binaryTargets = ["native"]
 }
 
 datasource db {
@@ -8,61 +8,66 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Agenda {
-  mov          String?        @db.VarChar
+model agenda {
   id           Int            @id
-  tipo         String?        @db.VarChar
-  Movimentacao Movimentacao[]
+  descricao    String?        @db.VarChar
+  natureza     String?        @db.VarChar
+  movimentacao movimentacao[]
 }
 
-model Equipamento {
+model equipamento {
+  id        Int      @id
   codigo    Int?
-  status    status?
-  filial    Int?
-  plaqueta  Int      @id
+  filial_id Int?
   descricao String?  @db.VarChar
   valor     Decimal? @db.Money
-  setor     Int?
-  Filial    Filial?  @relation(fields: [filial], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  Setor     Setor?   @relation(fields: [setor], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  setor_id  Int?
+  usuario   usuario? @relation(fields: [filial_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  setor     setor?   @relation(fields: [setor_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }
 
-model Filial {
-  id                                                Int            @id
-  descricao                                         String?        @db.VarChar
-  responsavel                                       String?        @db.VarChar
-  Equipamento                                       Equipamento[]
-  Movimentacao_Movimentacao_destinatario_idToFilial Movimentacao[] @relation("Movimentacao_destinatario_idToFilial")
-  Movimentacao_Movimentacao_remetente_idToFilial    Movimentacao[] @relation("Movimentacao_remetente_idToFilial")
+model movimentacao {
+  id                                            Int       @id @default(autoincrement())
+  status                                        status?
+  data_envio                                    DateTime? @db.Date
+  data_retorno                                  DateTime? @db.Date
+  setor_id                                      Int?
+  observacao                                    String?   @db.VarChar
+  remetente_id                                  Int?
+  destinatario_id                               Int?
+  equipamentos_id                               Int[]
+  tipo                                          Int?
+  usuario_movimentacao_destinatario_idTousuario usuario?  @relation("movimentacao_destinatario_idTousuario", fields: [destinatario_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  usuario_movimentacao_remetente_idTousuario    usuario?  @relation("movimentacao_remetente_idTousuario", fields: [remetente_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  setor                                         setor?    @relation(fields: [setor_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  agenda                                        agenda?   @relation(fields: [tipo], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }
 
-model Movimentacao {
-  id                                          Int       @id @default(autoincrement())
-  status                                      status?
-  data_envio                                  DateTime? @db.Date
-  data_retorno                                DateTime? @db.Date
-  setor                                       Int?
-  observacao                                  String?   @db.VarChar
-  remetente_id                                Int?
-  destinatario_id                             Int?
-  equipamentos_id                             Int[]
-  movimentacao                                Int?
-  Filial_Movimentacao_destinatario_idToFilial Filial?   @relation("Movimentacao_destinatario_idToFilial", fields: [destinatario_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  Agenda                                      Agenda?   @relation(fields: [movimentacao], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  Filial_Movimentacao_remetente_idToFilial    Filial?   @relation("Movimentacao_remetente_idToFilial", fields: [remetente_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  Setor                                       Setor?    @relation(fields: [setor], references: [id], onDelete: NoAction, onUpdate: NoAction)
-}
-
-model Setor {
+model setor {
   id           Int            @id
   descricao    String?        @db.VarChar
   responsavel  String?        @db.VarChar
-  Equipamento  Equipamento[]
-  Movimentacao Movimentacao[]
+  equipamento  equipamento[]
+  movimentacao movimentacao[]
+}
+
+model usuario {
+  id                                                 Int            @id
+  nome                                               String?        @db.VarChar
+  tipo                                               String?        @db.VarChar
+  setores_id                                         Int[]
+  equipamento                                        equipamento[]
+  movimentacao_movimentacao_destinatario_idTousuario movimentacao[] @relation("movimentacao_destinatario_idTousuario")
+  movimentacao_movimentacao_remetente_idTousuario    movimentacao[] @relation("movimentacao_remetente_idTousuario")
 }
 
 enum status {
   sent
   waiting
   confirmed
+}
+
+enum user {
+  filial
+  sede
 }

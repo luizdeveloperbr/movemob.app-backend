@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config'
+import { ConfigModule } from '@nestjs/config';
 import { PrismaService } from './database/prisma/prisma.service';
 import { EquipamentoController } from './entities/equipamento/equipamento.controller';
 import { EquipamentoService } from './entities/equipamento/equipamento.services';
@@ -11,4 +11,4 @@ import { MovimentacaoService } from './entities/movimentacao/movimentacao.servic
   controllers: [EquipamentoController, MovimentacaoController],
   providers: [PrismaService, EquipamentoService, MovimentacaoService],
 })
-export class AppModule { }
+export class AppModule {}
