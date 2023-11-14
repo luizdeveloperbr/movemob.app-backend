@@ -3,22 +3,27 @@ import { PrismaService } from '../../database/prisma/prisma.service';
 import { equipamento as EquipamentoModel } from '@prisma/client';
 @Injectable()
 export class EquipamentoService {
-  constructor(private readonly prismaService: PrismaService) { }
+  constructor(private readonly prismaService: PrismaService) {}
 
   async listarEquipamentos(): Promise<EquipamentoModel[]> {
-    return this.prismaService.equipamento.findMany();
+    return this.prismaService.equipamento.findMany({
+      include: { setor: { select: { descricao: true } } },
+    });
   }
 
   async selecionarEquipamentoPeloId(id: number): Promise<EquipamentoModel> {
     return this.prismaService.equipamento.findFirst({
       where: { id },
-      include: {
+      include:{
         setor: true,
-        usuario: { 
-          select: { 
-            nome: true,
-            tipo: true,
-            id: true 
+        movimentacao:{
+          select:{
+            status: true
+          }
+        },
+        filial: {
+          select:{
+            descricao: true
           }
         }
       }
@@ -32,9 +37,11 @@ export class EquipamentoService {
       data: equipamentoRequestBody,
     });
   }
-  async transferirEquipamento(id,tipo,destinatario): Promise<EquipamentoModel>{
-    return 
+  async transferirEquipamento(
+    id,
+    tipo,
+    destinatario,
+  ): Promise<EquipamentoModel> {
+    return;
   }
-
-
 }
