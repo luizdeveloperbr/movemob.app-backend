@@ -1,5 +1,5 @@
 generator client {
-  provider = "prisma-client-js"
+  provider      = "prisma-client-js"
   binaryTargets = ["native"]
 }
 
@@ -16,55 +16,60 @@ model agenda {
 }
 
 model equipamento {
-  id        Int      @id
-  codigo    Int?
-  filial_id Int?
-  descricao String?  @db.VarChar
-  valor     Decimal? @db.Money
-  setor_id  Int?
-  usuario   usuario? @relation(fields: [filial_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  setor     setor?   @relation(fields: [setor_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  id              Int           @id
+  codigo          Int?
+  filial_id       Int?
+  descricao       String?       @db.VarChar
+  valor           Decimal?      @db.Money
+  setor_id        Int?
+  movimentacao_id Int?
+  filial         filial?       @relation(fields: [filial_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  movimentacao    movimentacao? @relation(fields: [movimentacao_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  setor           setor?        @relation(fields: [setor_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }
 
 model movimentacao {
-  id                                            Int       @id @default(autoincrement())
-  status                                        status?
-  data_envio                                    DateTime? @db.Date
-  data_retorno                                  DateTime? @db.Date
+  id                                            Int           @id @default(autoincrement())
+  status                                        status
+  data_envio                                    DateTime?     @db.Date
+  data_retorno                                  DateTime?     @db.Date
   setor_id                                      Int?
-  observacao                                    String?   @db.VarChar
+  observacao                                    String?       @db.VarChar
   remetente_id                                  Int?
   destinatario_id                               Int?
   equipamentos_id                               Int[]
   tipo                                          Int?
-  usuario_movimentacao_destinatario_idTousuario usuario?  @relation("movimentacao_destinatario_idTousuario", fields: [destinatario_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  usuario_movimentacao_remetente_idTousuario    usuario?  @relation("movimentacao_remetente_idTousuario", fields: [remetente_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  setor                                         setor?    @relation(fields: [setor_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  agenda                                        agenda?   @relation(fields: [tipo], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  equipamento                                   equipamento[]
+  usuario_movimentacao_destinatario_idTousuario filial?       @relation("movimentacao_destinatario_idTousuario", fields: [destinatario_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  usuario_movimentacao_remetente_idTousuario    filial?       @relation("movimentacao_remetente_idTousuario", fields: [remetente_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  setor                                         setor?        @relation(fields: [setor_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  agenda                                        agenda?       @relation(fields: [tipo], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }
 
 model setor {
   id           Int            @id
   descricao    String?        @db.VarChar
   responsavel  String?        @db.VarChar
+  filial       Int?
   equipamento  equipamento[]
   movimentacao movimentacao[]
+  usuario      filial?        @relation(fields: [filial], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "filial_pkey")
 }
 
-model usuario {
-  id                                                 Int            @id
-  nome                                               String?        @db.VarChar
-  tipo                                               String?        @db.VarChar
+model filial {
+  id                                                 Int            @id(map: "usuario_pkey")
+  descricao                                          String?        @db.VarChar
   setores_id                                         Int[]
   equipamento                                        equipamento[]
   movimentacao_movimentacao_destinatario_idTousuario movimentacao[] @relation("movimentacao_destinatario_idTousuario")
   movimentacao_movimentacao_remetente_idTousuario    movimentacao[] @relation("movimentacao_remetente_idTousuario")
+  setor                                              setor[]
 }
 
 enum status {
-  sent
-  waiting
-  confirmed
+  iniciado
+  pendente
+  confirmado
 }
 
 enum user {
