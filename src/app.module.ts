@@ -5,10 +5,12 @@ import { EquipamentoController } from './entities/equipamento/equipamento.contro
 import { EquipamentoService } from './entities/equipamento/equipamento.services';
 import { MovimentacaoController } from './entities/movimentacao/movimentacao.controller';
 import { MovimentacaoService } from './entities/movimentacao/movimentacao.service';
+import { FilialController } from './entities/filial/filial.controller';
+import { FilialService } from './entities/filial/filial.services';
 
 @Module({
   imports: [ConfigModule.forRoot()],
-  controllers: [EquipamentoController, MovimentacaoController],
-  providers: [PrismaService, EquipamentoService, MovimentacaoService],
+  controllers: [EquipamentoController, MovimentacaoController, FilialController],
+  providers: [PrismaService, EquipamentoService, MovimentacaoService, FilialService],
 })
 export class AppModule {}

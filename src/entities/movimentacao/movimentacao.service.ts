@@ -1,6 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../../database/prisma/prisma.service';
-import { movimentacao as MovimentacaoModel } from '@prisma/client';
+import {
+  movimentacao as MovimentacaoModel,
+  equipamento as EquipamentoModel,
+} from '@prisma/client';
 
 @Injectable()
 export class MovimentacaoService {
@@ -8,5 +11,12 @@ export class MovimentacaoService {
 
   async listarMovimentacoes(): Promise<MovimentacaoModel[]> {
     return this.prismaService.movimentacao.findMany();
+  }
+
+  async transferirEquipamento(
+    remetente,
+    destinatario,
+  ): Promise<EquipamentoModel> {
+    return;
   }
 }

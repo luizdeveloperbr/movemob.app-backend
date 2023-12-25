@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../../database/prisma/prisma.service';
 import { equipamento as EquipamentoModel } from '@prisma/client';
 @Injectable()
-export class EquipamentoService {
+export class EquipamentoService { 
   constructor(private readonly prismaService: PrismaService) {}
 
   async listarEquipamentos(): Promise<EquipamentoModel[]> {

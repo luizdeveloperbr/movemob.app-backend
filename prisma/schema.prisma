@@ -23,47 +23,50 @@ model equipamento {
   valor           Decimal?      @db.Money
   setor_id        Int?
   movimentacao_id Int?
-  filial         filial?       @relation(fields: [filial_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  imagens         String[]
+  filial          filial?       @relation(fields: [filial_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
   movimentacao    movimentacao? @relation(fields: [movimentacao_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
   setor           setor?        @relation(fields: [setor_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }
 
 model movimentacao {
-  id                                            Int           @id @default(autoincrement())
-  status                                        status
-  data_envio                                    DateTime?     @db.Date
-  data_retorno                                  DateTime?     @db.Date
-  setor_id                                      Int?
-  observacao                                    String?       @db.VarChar
-  remetente_id                                  Int?
-  destinatario_id                               Int?
-  equipamentos_id                               Int[]
-  tipo                                          Int?
-  equipamento                                   equipamento[]
-  usuario_movimentacao_destinatario_idTousuario filial?       @relation("movimentacao_destinatario_idTousuario", fields: [destinatario_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  usuario_movimentacao_remetente_idTousuario    filial?       @relation("movimentacao_remetente_idTousuario", fields: [remetente_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  setor                                         setor?        @relation(fields: [setor_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  agenda                                        agenda?       @relation(fields: [tipo], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  id                                                 Int           @id @default(autoincrement())
+  status                                             status
+  data_envio                                         DateTime?     @db.Date
+  data_retorno                                       DateTime?     @db.Date
+  remetente_setor_id                                 Int?
+  observacao                                         String?       @db.VarChar
+  remetente_filial_id                                Int?
+  destinatario_filial_id                             Int?
+  equipamentos_id                                    Int[]
+  tipo                                               Int?
+  destinatario_setor_id                              Int?
+  equipamento                                        equipamento[]
+  filial_movimentacao_destinatario_filial_idTofilial filial?       @relation("movimentacao_destinatario_filial_idTofilial", fields: [destinatario_filial_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "movimentacao_destinatario_id_fkey")
+  setor_movimentacao_destinatario_setor_idTosetor    setor?        @relation("movimentacao_destinatario_setor_idTosetor", fields: [destinatario_setor_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "movimentacao_destino_setor_id_fkey")
+  filial_movimentacao_remetente_filial_idTofilial    filial?       @relation("movimentacao_remetente_filial_idTofilial", fields: [remetente_filial_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "movimentacao_remetente_id_fkey")
+  setor                                              setor?        @relation(fields: [remetente_setor_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "movimentacao_setor_id_fkey")
+  agenda                                             agenda?       @relation(fields: [tipo], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }
 
 model setor {
-  id           Int            @id
-  descricao    String?        @db.VarChar
-  responsavel  String?        @db.VarChar
-  filial       Int?
-  equipamento  equipamento[]
-  movimentacao movimentacao[]
-  usuario      filial?        @relation(fields: [filial], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "filial_pkey")
+  id                                                     Int            @id
+  descricao                                              String?        @db.VarChar
+  responsavel                                            String?        @db.VarChar
+  filial                                                 Int?
+  equipamento                                            equipamento[]
+  movimentacao_movimentacao_destinatario_setor_idTosetor movimentacao[] @relation("movimentacao_destinatario_setor_idTosetor")
+  movimentacao                                           movimentacao[]
+  usuario                                                filial?        @relation(fields: [filial], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "filial_pkey")
 }
 
 model filial {
-  id                                                 Int            @id(map: "usuario_pkey")
-  descricao                                          String?        @db.VarChar
-  setores_id                                         Int[]
-  equipamento                                        equipamento[]
-  movimentacao_movimentacao_destinatario_idTousuario movimentacao[] @relation("movimentacao_destinatario_idTousuario")
-  movimentacao_movimentacao_remetente_idTousuario    movimentacao[] @relation("movimentacao_remetente_idTousuario")
-  setor                                              setor[]
+  id                                                       Int            @id(map: "usuario_pkey")
+  descricao                                                String?        @db.VarChar
+  equipamento                                              equipamento[]
+  movimentacao_movimentacao_destinatario_filial_idTofilial movimentacao[] @relation("movimentacao_destinatario_filial_idTofilial")
+  movimentacao_movimentacao_remetente_filial_idTofilial    movimentacao[] @relation("movimentacao_remetente_filial_idTofilial")
+  setor                                                    setor[]
 }
 
 enum status {
