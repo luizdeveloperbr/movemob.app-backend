@@ -13,10 +13,4 @@ export class MovimentacaoService {
     return this.prismaService.movimentacao.findMany();
   }
 
-  async transferirEquipamento(
-    remetente,
-    destinatario,
-  ): Promise<EquipamentoModel> {
-    return;
-  }
 }
