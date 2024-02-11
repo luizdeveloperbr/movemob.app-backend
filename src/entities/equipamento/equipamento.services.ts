@@ -5,13 +5,13 @@ import { equipamento as EquipamentoModel } from '@prisma/client';
 export class EquipamentoService { 
   constructor(private readonly prismaService: PrismaService) {}
 
-  async listarEquipamentos(): Promise<EquipamentoModel[]> {
+  listarEquipamentos(): Promise<EquipamentoModel[]> {
     return this.prismaService.equipamento.findMany({
       include: { setor: { select: { descricao: true } } },
     });
   }
 
-  async selecionarEquipamentoPeloId(id: number): Promise<EquipamentoModel> {
+  selecionarEquipamentoPeloId(id: number): Promise<EquipamentoModel> {
     return this.prismaService.equipamento.findFirst({
       where: { id },
       include:{

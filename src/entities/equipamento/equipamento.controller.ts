@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
+import { Body, Controller, Get, HttpException, HttpStatus, Param, Post, Query } from '@nestjs/common';
 import { EquipamentoService } from '../equipamento/equipamento.services';
 import { equipamento as EquipamentoModel } from '@prisma/client';
 
@@ -7,13 +7,19 @@ export class EquipamentoController {
   constructor(private readonly equipamentoService: EquipamentoService) {}
 
   @Get()
-  listarEquipamentos() {
+   listarEquipamentos() {
     return this.equipamentoService.listarEquipamentos();
+
   }
 
   @Get('/:id')
-  selecionarEquipamentoPeloId(@Param('id') id: number) {
-    return this.equipamentoService.selecionarEquipamentoPeloId(Number(id));
+  async selecionarEquipamentoPeloId(@Param('id') id: number) {
+    const data = await this.equipamentoService.selecionarEquipamentoPeloId(Number(id));
+    if(data){
+      return data
+    }else{
+      throw new HttpException("Não Encontrado", HttpStatus.NOT_FOUND)
+    }
   }
   @Post()
   adicionarEquipamento(@Body() novoEquipamento: EquipamentoModel) {
