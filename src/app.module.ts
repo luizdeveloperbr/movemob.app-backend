@@ -9,10 +9,25 @@ import { FilialController } from './entities/filial/filial.controller';
 import { FilialService } from './entities/filial/filial.services';
 import {SetoresController} from './entities/setor/setor.controller'
 import {SetorService } from './entities/setor/setor.service'
+import { AuthController } from './auth/auth.controller';
+import { UsuarioService } from './entities/usuario/usuario.service';
 
 @Module({
   imports: [ConfigModule.forRoot()],
-  controllers: [EquipamentoController, MovimentacaoController, FilialController, SetoresController],
-  providers: [PrismaService, EquipamentoService, MovimentacaoService, FilialService, SetorService],
+  controllers: [
+    EquipamentoController,
+    MovimentacaoController,
+    FilialController,
+    SetoresController,
+    AuthController
+  ],
+  providers: [
+    PrismaService,
+    EquipamentoService,
+    MovimentacaoService,
+    FilialService,
+    SetorService,
+    UsuarioService
+  ],
 })
 export class AppModule {}

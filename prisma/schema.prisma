@@ -36,7 +36,7 @@ model filial {
   movimentacao_movimentacao_destinatario_filial_idTofilial movimentacao[] @relation("movimentacao_destinatario_filial_idTofilial")
   movimentacao_movimentacao_remetente_filial_idTofilial    movimentacao[] @relation("movimentacao_remetente_filial_idTofilial")
   setor                                                    setor[]
-  usuario                                                  usuario[]
+  responsavel                                              usuario[]
 }
 
 model movimentacao {
@@ -67,12 +67,14 @@ model setor {
   movimentacao_movimentacao_destinatario_setor_idTosetor movimentacao[] @relation("movimentacao_destinatario_setor_idTosetor")
   movimentacao_movimentacao_remetente_setor_idTosetor    movimentacao[] @relation("movimentacao_remetente_setor_idTosetor")
   filial                                                 filial?        @relation(fields: [filial_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  usuario                                                usuario[]
+  responsavel                                            usuario[]
 }
 
 model usuario {
   id       Int     @id
   nome     String? @db.VarChar
+  email    String? @unique
+  password String?
   filal_id Int?
   setor_id Int?
   cargo    cargo?
@@ -81,6 +83,7 @@ model usuario {
 }
 
 enum cargo {
+  aux_encarregado
   encarregado
   gerente
 }
