@@ -9,7 +9,6 @@ import { FilialController } from './entities/filial/filial.controller';
 import { FilialService } from './entities/filial/filial.services';
 import {SetoresController} from './entities/setor/setor.controller'
 import {SetorService } from './entities/setor/setor.service'
-import { AppController } from './app.controller';
 import { AuthModule } from './auth/auth.module';
 
 @Module({
@@ -19,7 +18,6 @@ import { AuthModule } from './auth/auth.module';
     MovimentacaoController,
     FilialController,
     SetoresController,
-    AppController
   ],
   providers: [
     PrismaService,

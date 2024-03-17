@@ -1,5 +1,5 @@
 import * as bcrypt from 'bcrypt'
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { UsuarioService } from 'src/entities/usuario/usuario.service';
 
 type createUsuario = {
@@ -17,17 +17,20 @@ export class AuthService {
 
   async signIn(email: string, pass: string) {
     const user = await this.usuarioService.findOne(email)
-    const decodedPass = await bcrypt.compare(pass, user?.password)
-    if (user && decodedPass) {
-      const { password, ...result } = user;
-      // TODO: Generate a JWT and return it here
-      // instead of the user object
-      return result;
+    if(user) {
+      const decodedPass = await bcrypt.compare(pass, user.password)
+      if(decodedPass){
+
+        const { password, ...result } = user;
+        // TODO: Generate a JWT and return it here
+        // instead of the user object
+        return result;
+      }
     }
-    throw new UnauthorizedException();
+    return null
   }
   async signUp(createUsuarioDto: createUsuario) {
-    const hashPassword = await bcrypt.hash(createUsuarioDto.password, process.env.ENCRYPT_SALT)
+    const hashPassword = await bcrypt.hash(createUsuarioDto.password, Number(process.env.ENCRYPT_SALT))
     const data = Object.assign(createUsuarioDto,{password: hashPassword})
     this.usuarioService.createUsuario(data)
   }
