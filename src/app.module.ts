@@ -9,17 +9,17 @@ import { FilialController } from './entities/filial/filial.controller';
 import { FilialService } from './entities/filial/filial.services';
 import {SetoresController} from './entities/setor/setor.controller'
 import {SetorService } from './entities/setor/setor.service'
-import { AuthController } from './auth/auth.controller';
-import { UsuarioService } from './entities/usuario/usuario.service';
+import { AppController } from './app.controller';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
-  imports: [ConfigModule.forRoot()],
+  imports: [ConfigModule.forRoot(), AuthModule],
   controllers: [
     EquipamentoController,
     MovimentacaoController,
     FilialController,
     SetoresController,
-    AuthController
+    AppController
   ],
   providers: [
     PrismaService,
@@ -27,7 +27,6 @@ import { UsuarioService } from './entities/usuario/usuario.service';
     MovimentacaoService,
     FilialService,
     SetorService,
-    UsuarioService
   ],
 })
 export class AppModule {}
