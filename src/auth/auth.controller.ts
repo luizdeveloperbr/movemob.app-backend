@@ -1,16 +1,17 @@
-import { Body, Controller, NotFoundException, Post } from "@nestjs/common";
+import { Controller, HttpCode, HttpStatus, Post, Body } from '@nestjs/common';
+import { AuthService } from './auth.service';
 
-import { UsuarioService } from "src/entities/usuario/usuario.service";
 @Controller('auth')
 export class AuthController {
-    constructor(private readonly usuarioService: UsuarioService) { }
+    constructor(private authService: AuthService) {}
 
-    @Post('/login')
-   async login(@Body() requestBody: {email: string}) {
-       const usuario = await this.usuarioService.buscarUsuarios(requestBody)
-       if(!usuario){
-           throw new NotFoundException()
-       }
-           return usuario
+    @HttpCode(HttpStatus.OK)
+    @Post('login')
+    signIn(@Body() signInDTO: Record<string, any>){
+        return this.authService.signIn(signInDTO.email, signInDTO.password)
+    }
+    @Post('new')
+    signUp(@Body() createUsuario: any){
+        return this.authService.signUp(createUsuario)
     }
 }
