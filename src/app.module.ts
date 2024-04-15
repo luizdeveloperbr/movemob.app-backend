@@ -1,30 +1,17 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { PrismaService } from './database/prisma/prisma.service';
-import { EquipamentoController } from './entities/equipamento/equipamento.controller';
-import { EquipamentoService } from './entities/equipamento/equipamento.services';
-import { MovimentacaoController } from './entities/movimentacao/movimentacao.controller';
-import { MovimentacaoService } from './entities/movimentacao/movimentacao.service';
-import { FilialController } from './entities/filial/filial.controller';
-import { FilialService } from './entities/filial/filial.services';
-import {SetoresController} from './entities/setor/setor.controller'
-import {SetorService } from './entities/setor/setor.service'
-import { AuthModule } from './auth/auth.module';
+import { EquipamentoModule } from './entities/equipamento/equipamento.module';
+import { MovimentacaoModule } from './entities/movimentacao/movimentacao.module';
+import { FilialModule } from './entities/filial/filial.module';
+import { SetorModule } from './entities/setor/setor.module';
 
 @Module({
-  imports: [ConfigModule.forRoot(), AuthModule],
-  controllers: [
-    EquipamentoController,
-    MovimentacaoController,
-    FilialController,
-    SetoresController,
-  ],
-  providers: [
-    PrismaService,
-    EquipamentoService,
-    MovimentacaoService,
-    FilialService,
-    SetorService,
-  ],
+  imports: [
+            ConfigModule.forRoot(),
+            EquipamentoModule,
+            MovimentacaoModule,
+            FilialModule,
+            SetorModule
+           ],
 })
 export class AppModule {}
