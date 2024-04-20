@@ -1,13 +1,15 @@
-import { Body, Controller, Get, HttpException, HttpStatus, Param, Post, Query } from '@nestjs/common';
+import { Body, Controller, Get, HttpException, HttpStatus, Param, Post, Query, UseGuards, Request } from '@nestjs/common';
 import { EquipamentoService } from '../equipamento/equipamento.services';
 import { equipamento as EquipamentoModel } from '@prisma/client';
+// import { AuthenticatedGuard } from 'src/auth/authenticated.guard';
 
 @Controller('equipamento')
 export class EquipamentoController {
   constructor(private readonly equipamentoService: EquipamentoService) {}
-
+  // @UseGuards(AuthenticatedGuard)
   @Get()
-   listarEquipamentos() {
+   listarEquipamentos(@Request() req) {
+    console.log('cookie', JSON.stringify(req.headers))
     return this.equipamentoService.listarEquipamentos();
 
   }
