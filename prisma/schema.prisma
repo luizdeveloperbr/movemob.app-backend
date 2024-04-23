@@ -74,11 +74,11 @@ model usuario {
   id       Int     @id
   nome     String? @db.VarChar
   email    String? @unique
-  password String?
-  filal_id Int?
+  password String
+  filial_id Int?
   setor_id Int?
   cargo    cargo?
-  filial   filial? @relation(fields: [filal_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  filial   filial? @relation(fields: [filial_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
   setor    setor?  @relation(fields: [setor_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }
 
