@@ -10,15 +10,7 @@ type UserCredentials = {
 @Controller('auth')
 export class AuthController {
     constructor(private readonly authService: AuthService) { }
-    @Post('/login')
-    @HttpCode(200)
-    async callLoginFunction(@Body() userCredentials: UserCredentials) {
-       let userInfo = await this.authService.login(userCredentials.email, userCredentials.password)
-       if(userInfo?.token) return userInfo
-       handlerException(userInfo)
-    }
     @Post('/singup')
-    // @HttpCode(201)
     @Redirect('/setores')
     async callSingUpFunction(@Body() userInformationBody: usuario){
         const createdUser = await this.authService.singup(userInformationBody)

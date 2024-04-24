@@ -6,6 +6,7 @@ import { FilialModule } from './entities/filial/filial.module';
 import { SetorModule } from './entities/setor/setor.module';
 import { AuthModule } from './auth/auth.module';
 import { UserModule } from './entities/user/user.module';
+import { AppController } from './app.controller';
 
 @Module({
   imports: [
@@ -17,5 +18,6 @@ import { UserModule } from './entities/user/user.module';
             AuthModule,
             UserModule
            ],
+  controllers: [AppController]
 })
 export class AppModule {}

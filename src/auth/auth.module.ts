@@ -5,7 +5,8 @@ import { UserService } from 'src/entities/user/user.service'
 import { UserModule } from 'src/entities/user/user.module'
 import { JwtModule } from '@nestjs/jwt'
 import { PassportModule } from '@nestjs/passport'
-import { JwtStrategy } from './jwt.strategy'
+import { JwtStrategy } from './strategies/jwt.strategy'
+import { LocalStrategy } from './strategies/local.strategy'
 @Module({
     imports: [UserModule,
         PassportModule,
@@ -13,7 +14,8 @@ import { JwtStrategy } from './jwt.strategy'
         secret: process.env.TOKEN_SECRET,
         global: true,
         signOptions: { expiresIn: '60m' }})],
-        providers: [AuthService, UserService, JwtStrategy],
-        controllers: [AuthController]
+        providers: [AuthService, UserService,LocalStrategy, JwtStrategy],
+        controllers: [AuthController],
+        exports: [AuthService]
 })
 export class AuthModule {}
