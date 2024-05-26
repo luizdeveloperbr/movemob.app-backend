@@ -1,11 +1,12 @@
 import { Injectable } from "@nestjs/common";
 import { PrismaService } from "src/database/prisma/prisma.service";
-
+import { Department } from "../setor/dto/DepartmentDto";
+import { Subsidiary } from "./dto/SubsidiaryDto";
 
 @Injectable()
-export class FilialService {
+export class SubsidiaryService {
     constructor(private readonly prismaService: PrismaService) { }
-    async listarFiliais() {
+    async listSubsidiary(): Promise<(Subsidiary & { setor: Department[]; })[]> {
         return this.prismaService.filial.findMany({
             include: {
                 setor: true

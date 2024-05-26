@@ -11,15 +11,15 @@ export class AuthService {
     ) {}
     async validateUser(email: string, password: string){
         let user = await this.userService.getUser(email)
-            if(!user) return null
-            if(await bcrypt.compare(password, user.password) === false)  return null
+            if(!user) return 404
+            if(await bcrypt.compare(password, user.password) === false)  return 401
             delete user.password
             return user
     }
 
     async login(user: any){
-                const payload = {sub: user.id, nome: user.nome}
-                return { token: this.jwtService.sign(payload) }
+                const payload = {sub: user.email, nome: user.nome, filial: user.filial_id}
+                return { ...user, token: this.jwtService.sign(payload) }
     }
 
     async singup(userInformationsData: usuario){

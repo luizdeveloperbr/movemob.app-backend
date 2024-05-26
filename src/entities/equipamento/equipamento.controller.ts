@@ -1,19 +1,18 @@
-import { Body, Controller, Get, HttpException, HttpStatus, Param, Post, Query, UseGuards, Request } from '@nestjs/common';
+import { Body, Controller, Get, HttpException, HttpStatus, Param, Post, Query, UseGuards } from '@nestjs/common';
 import { EquipamentoService } from '../equipamento/equipamento.services';
 import { equipamento as EquipamentoModel } from '@prisma/client';
-// import { AuthenticatedGuard } from 'src/auth/authenticated.guard';
+// import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 
 @Controller('equipamento')
 export class EquipamentoController {
   constructor(private readonly equipamentoService: EquipamentoService) {}
-  // @UseGuards(AuthenticatedGuard)
   @Get()
-   listarEquipamentos(@Request() req) {
-    console.log('cookie', JSON.stringify(req.headers))
+   listarEquipamentos() {
     return this.equipamentoService.listarEquipamentos();
 
   }
 
+  // @UseGuards(JwtAuthGuard)
   @Get('/:id')
   async selecionarEquipamentoPeloId(@Param('id') id: number) {
     const data = await this.equipamentoService.selecionarEquipamentoPeloId(Number(id));
