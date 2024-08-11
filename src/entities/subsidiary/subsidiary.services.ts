@@ -6,10 +6,14 @@ import { Subsidiary } from "./dto/SubsidiaryDto";
 @Injectable()
 export class SubsidiaryService {
     constructor(private readonly prismaService: PrismaService) { }
-    async listSubsidiary(): Promise<(Subsidiary & { setor: Department[]; })[]> {
+    async listSubsidiary()/** : Promise<Subsidiary[]>*/ {
         return this.prismaService.filial.findMany({
-            include: {
-                setor: true
+            include:{
+                setor: {
+                    select: {
+                        descricao: true
+                    }
+                }
             }
         })
     }

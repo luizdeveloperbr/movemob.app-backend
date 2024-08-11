@@ -16,10 +16,11 @@ export class SetorService {
       },
       include: {
           responsavel: {
-            select: {
-              nome: true
+            select:{
+              nome: true,
+              cargo: true
             }
-          }
+          } 
       }
     })
   }

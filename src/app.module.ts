@@ -6,18 +6,18 @@ import { SubsidiaryModule } from './entities/subsidiary/subsidiary.module';
 import { SetorModule } from './entities/setor/setor.module';
 import { AuthModule } from './auth/auth.module';
 import { UserModule } from './entities/user/user.module';
-import { AppController } from './app.controller';
+// import { AppController } from './app.controller';
 
 @Module({
   imports: [
-            ConfigModule.forRoot(),
-            EquipamentoModule,
-            MovimentacaoModule,
-            SubsidiaryModule,
-            SetorModule,
-            AuthModule,
-            UserModule
+           ConfigModule.forRoot(),
+           EquipamentoModule,
+           MovimentacaoModule,
+           SubsidiaryModule,
+           SetorModule,
+           AuthModule,
+           UserModule
            ],
-  controllers: [AppController]
+  // controllers: [AppController]
 })
 export class AppModule {}
